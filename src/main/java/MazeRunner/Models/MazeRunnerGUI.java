@@ -53,18 +53,14 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
         setResizable(false);
         setLayout(new BorderLayout(10, 10));
 
-        // Main layout setup
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // Setup maze panel with grid
         mazePanel.setLayout(new GridLayout(maze.getRows(), maze.getCols(), 1, 1));
         mazePanel.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 2));
 
-        // Adaugă JScrollPane pentru a face maze-ul scrollabil
         JScrollPane mazeScrollPane = new JScrollPane(mazePanel);
         mazeScrollPane.setPreferredSize(new Dimension(maze.getCols() * 50, maze.getRows() * 50));
-        // Ajustează dimensiunea celulelor
 
         mainPanel.add(gameInfoPanel, BorderLayout.NORTH);
         mainPanel.add(mazePanel, BorderLayout.CENTER);
@@ -96,7 +92,6 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
         gameMenu.addSeparator();
         gameMenu.add(exit);
 
-        // Help Menu
         JMenu helpMenu = new JMenu("Help");
         JMenuItem instructions = new JMenuItem("How to Play");
         JMenuItem about = new JMenuItem("About");
@@ -115,14 +110,12 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
     private void setupGameInfoPanel() {
         gameInfoPanel.setLayout(new GridLayout(1, 4, 10, 0));
 
-        // Style the labels
         Font infoFont = new Font("Arial", Font.BOLD, 14);
         timerLabel.setFont(infoFont);
         scoreLabel.setFont(infoFont);
         healthLabel.setFont(infoFont);
         powerUpsLabel.setFont(infoFont);
 
-        // Add backgrounds and borders
         Component[] labels = {timerLabel, scoreLabel, healthLabel, powerUpsLabel};
         for (Component label : labels) {
             ((JLabel) label).setOpaque(true);
@@ -159,7 +152,6 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
         cell.setHorizontalAlignment(SwingConstants.CENTER);
         cell.setVerticalAlignment(SwingConstants.CENTER);
         cell.setOpaque(true);
-        //cell.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 
         if (row == player.getRow() && col == player.getCol()) {
             cell.setText("😀");
@@ -237,9 +229,9 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
                 null, options, options[0]);
 
         if (choice == 0) {
-            isPaused = false;  // Reluăm jocul
+            isPaused = false;
         } else if (choice == 1) {
-            System.exit(0);  // Ieșim din joc
+            System.exit(0);
         }
     }
 
@@ -319,7 +311,6 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
         private void handleMovement(int newRow, int newCol) {
             if (maze.isValidMove(newRow, newCol)) {
                 if (player.hasSpeedBoost()) {
-                    // Allow double movement with speed boost
                     int deltaRow = newRow - player.getRow();
                     int deltaCol = newCol - player.getCol();
                     if (maze.isValidMove(newRow + deltaRow, newCol + deltaCol)) {
@@ -346,7 +337,6 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
             int timeBonus = Math.max(0, 1000 - seconds * 10);
             int finalScore = player.getScore() + timeBonus;
 
-            // Arată mesajul de felicitare și scorul final
             JOptionPane.showMessageDialog(null,
                     "Level Complete!\n\n" +
                             "Time: " + seconds + " seconds\n" +
@@ -355,20 +345,17 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
                     "Congratulations!",
                     JOptionPane.INFORMATION_MESSAGE);
 
-            // Adăuga scorul la clasament și salvează
             gameState.addScore(finalScore);
             gameState.saveCurrentScore();
 
-            // Permite utilizatorului să înceapă un nou joc sau să părăsească
-            int choice = JOptionPane.showConfirmDialog(MazeRunner.Models.MazeRunnerGUI.this, // Folosește instanța corectă
+            int choice = JOptionPane.showConfirmDialog(MazeRunner.Models.MazeRunnerGUI.this,
                     "Would you like to play again?",
                     "Game Over",
                     JOptionPane.YES_NO_OPTION);
 
             if (choice == JOptionPane.YES_OPTION) {
-                startNewGame(); // Începe un nou joc
+                startNewGame();
             } else {
-                // Poți adăuga logica de ieșire fără a închide fereastra
                 JOptionPane.showMessageDialog(MazeRunner.Models.MazeRunnerGUI.this,
                         "Thanks for playing!\n" +
                                 "Your score has been saved.",
@@ -438,7 +425,6 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
 
     @Override
     public void startNewGame() {
-        // Creăm opțiunile pentru selecția dificultății
         String[] difficulties = {"Easy", "Medium", "Hard"};
         String selectedDifficulty = (String) JOptionPane.showInputDialog(
                 this,
@@ -447,13 +433,11 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 difficulties,
-                difficulties[0] // Opțiunea implicită
+                difficulties[0]
         );
 
-        // Dacă utilizatorul nu alege nimic sau închide dialogul, ieșim din funcție
         if (selectedDifficulty == null) return;
 
-        // Convertim selecția la un nivel de dificultate
         MazeRunner.Models.Maze.DifficultyLevel difficulty;
         switch (selectedDifficulty) {
             case "Medium":
@@ -466,7 +450,6 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
                 difficulty = Maze.DifficultyLevel.EASY;
         }
 
-        // Confirmăm că jocul curent va fi resetat
         int choice = JOptionPane.showConfirmDialog(
                 this,
                 "Start a new game? Current progress will be lost.",
@@ -475,8 +458,7 @@ public class MazeRunnerGUI extends JFrame implements IMazeRunnerGUI {
         );
 
         if (choice == JOptionPane.YES_OPTION) {
-            // Resetează labirintul cu noua dificultate
-            maze.resetMaze(difficulty); // Asigură-te că metoda acceptă un nivel de dificultate
+            maze.resetMaze(difficulty);
             player.resetPlayer();
             seconds = 0;
             gameTimer.restart();

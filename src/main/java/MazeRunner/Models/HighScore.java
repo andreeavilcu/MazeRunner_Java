@@ -8,7 +8,6 @@ public class HighScore implements Comparable<MazeRunner.Models.HighScore>, Seria
     private final int score;
     private final String date;
 
-    // Default constructor for Jackson
     public HighScore() {
         this.playerName = "";
         this.score = 0;

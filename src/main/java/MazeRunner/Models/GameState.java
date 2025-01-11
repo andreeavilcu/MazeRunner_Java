@@ -81,7 +81,6 @@ public class GameState  implements IGameState {
     }
 
 
-    // În clasa GameState
     public void showHighScores() {
         StringBuilder sb = new StringBuilder("HighScores:\n\n");
 

@@ -20,13 +20,10 @@ public class StartGameConfig extends JDialog{
 
         JPanel titlePanel = createTitlePanel();
 
-        // Main Config Panel
         JPanel configPanel = createConfigPanel();
 
-        // Buttons Panel
         JPanel buttonPanel = createButtonPanel();
 
-        // Add all panels to dialog
         add(titlePanel, BorderLayout.NORTH);
         add(configPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
@@ -54,7 +51,6 @@ public class StartGameConfig extends JDialog{
         GridBagConstraints gbc = new GridBagConstraints();
         configPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        // Player Name
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
@@ -68,7 +64,6 @@ public class StartGameConfig extends JDialog{
         nameField = new JTextField(15);
         configPanel.add(nameField, gbc);
 
-        // Difficulty
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 0;
@@ -81,7 +76,6 @@ public class StartGameConfig extends JDialog{
         difficultyCombo.setSelectedItem(selectedDifficulty);
         configPanel.add(difficultyCombo, gbc);
 
-        // Add description for each difficulty level
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
@@ -121,7 +115,6 @@ public class StartGameConfig extends JDialog{
     public void validateAndStart() {
         String name = nameField.getText().trim();
 
-        // Verifică dacă numele este gol
         if (name.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Please enter your name!",
@@ -130,10 +123,8 @@ public class StartGameConfig extends JDialog{
             return;
         }
 
-        // Obține dificultatea din combo-box înainte de a o verifica
         selectedDifficulty = (MazeRunner.Models.Maze.DifficultyLevel) difficultyCombo.getSelectedItem();
 
-        // Verifică dacă dificultatea a fost selectată
         if (selectedDifficulty == null) {
             JOptionPane.showMessageDialog(this,
                     "Please select a difficulty level!",
@@ -142,7 +133,6 @@ public class StartGameConfig extends JDialog{
             return;
         }
 
-        // Setează numele jucătorului și pornește jocul
         playerName = name;
         startGame = true;
         dispose();

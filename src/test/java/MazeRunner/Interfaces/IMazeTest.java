@@ -69,12 +69,11 @@ public class IMazeTest {
 
     @Test
     public void getRows() {
-        assertEquals(5, maze.getRows()); // Dimensiunea trebuie să fie 5
+        assertEquals(5, maze.getRows());
     }
 
     @Test
     public void getCols() {
-        // Testează obținerea numărului de coloane
-        assertEquals(5, maze.getCols()); // Dimensiunea trebuie să fie 5
+        assertEquals(5, maze.getCols());
     }
 }

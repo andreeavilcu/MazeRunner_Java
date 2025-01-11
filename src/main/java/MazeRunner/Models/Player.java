@@ -24,15 +24,13 @@ public class Player implements IPlayer {
     }
 
     public void collectPowerUp(PowerUp powerUp) {
-        score += 50; // Points for collecting power-up
+        score += 50;
 
-        // Cancel existing timer if any
         if (powerUpTimers.containsKey(powerUp.getType())) {
             powerUpTimers.get(powerUp.getType()).stop();
         }
         applyPowerUpEffect(powerUp);
 
-        // Start new timer
         Timer timer = new Timer(powerUp.getDuration() * 1000, e -> {
             removePowerUpEffect(powerUp.getType());
             powerUpTimers.remove(powerUp.getType());
@@ -70,7 +68,7 @@ public class Player implements IPlayer {
 
     @Override
     public void move(int newRow, int newCol){
-        if (newRow >= 0 && newCol >= 0) {  // Validare coordonate
+        if (newRow >= 0 && newCol >= 0) {
             this.row = newRow;
             this.col = newCol;
         }
@@ -79,22 +77,18 @@ public class Player implements IPlayer {
 
     @Override
     public void resetPlayer() {
-        // Resetează poziția și sănătatea
         this.row = 0;
         this.col = 0;
         this.health = 100;
         this.score = 0;
 
-        // Resetează starea power-up-urilor
         this.hasSpeedBoost = false;
         this.hasShield = false;
 
-        // Oprește temporizatoarele pentru power-up-uri
         for (Timer timer : powerUpTimers.values()) {
             timer.stop();
         }
 
-        // Curăță lista de temporizatoare
         powerUpTimers.clear();
     }
 

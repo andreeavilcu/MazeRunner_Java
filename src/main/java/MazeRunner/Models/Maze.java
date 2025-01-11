@@ -15,9 +15,9 @@ public class Maze implements IMaze {
 
 
     public enum DifficultyLevel {
-        EASY(0.2),    // 20% walls
-        MEDIUM(0.35), // 35% walls
-        HARD(0.5);    // 50% walls
+        EASY(0.2),
+        MEDIUM(0.35),
+        HARD(0.5);
 
         private final double wallDensity;
 
@@ -43,7 +43,6 @@ public class Maze implements IMaze {
     private void generateMaze() {
         Random random = new Random();
 
-        // Inițializează toți pereții
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 walls[i][j] = true;
@@ -53,7 +52,6 @@ public class Maze implements IMaze {
         int startRow = 0, startCol =0;
         walls[startRow][startCol] = false;
 
-        //Generate maze using dfs
         dfs(startRow,startCol,random);
 
         ensurePathToExit(startRow, startCol, rows-1, cols -1);
@@ -68,20 +66,19 @@ public class Maze implements IMaze {
         int desiredWalls = (int)(totalCells * difficulty.getWallDensity());
         int currentWalls = countWalls();
         int attempts = 0;
-        int maxAttempts = totalCells * 2; // pentru a evita bucla infinită
+        int maxAttempts = totalCells * 2;
 
         while(currentWalls < desiredWalls && attempts < maxAttempts) {
             attempts++;
             int row = random.nextInt(rows);
             int col = random.nextInt(cols);
 
-            // Verifică dacă poziția este validă pentru un nou perete
             if(!walls[row][col] && !isExit(row, col) && !(row == 0 && col == 0)) {
                 walls[row][col] = true;
 
-                // Verifică dacă mai există un drum valid după adăugarea peretelui
+
                 if (!hasValidPath(0, 0, rows-1, cols-1)) {
-                    walls[row][col] = false; // dacă nu există drum, elimină peretele
+                    walls[row][col] = false;
                 } else {
                     currentWalls++;
                 }
@@ -106,19 +103,16 @@ public class Maze implements IMaze {
     }
 
     private boolean findPathDFS(int row, int col, int endRow, int endCol, boolean[][] visited) {
-        // Verifică dacă poziția curentă este în afara labirintului sau este perete
         if (row < 0 || row >= rows || col < 0 || col >= cols || walls[row][col] || visited[row][col]) {
             return false;
         }
 
-        // Am ajuns la ieșire
         if (row == endRow && col == endCol) {
             return true;
         }
 
         visited[row][col] = true;
 
-        // Direcțiile posibile: sus, jos, stânga, dreapta
         int[][] directions = {{-1,0}, {1,0}, {0,-1}, {0,1}};
 
         for (int[] dir : directions) {
@@ -133,12 +127,10 @@ public class Maze implements IMaze {
         return false;
     }
 
-    // Creează un drum garantat de la start la ieșire
     private void ensurePathToExit(int startRow, int startCol, int endRow, int endCol) {
         int currentRow = startRow;
         int currentCol = startCol;
 
-        // Construiește o cale directă către ieșire
         while (currentRow != endRow || currentCol != endCol) {
             if (currentRow < endRow) {
                 currentRow++;
@@ -149,7 +141,6 @@ public class Maze implements IMaze {
         }
     }
 
-    // DFS pentru generare aleatorie a labirintului
     private void dfs(int row, int col, Random random) {
         int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         shuffleArray(directions, random);
@@ -167,7 +158,6 @@ public class Maze implements IMaze {
     }
 
 
-    // Amestecare aleatorie a direcțiilor
     private void shuffleArray(int[][] array, Random random) {
         for (int i = array.length - 1; i > 0; i--) {
             int j = random.nextInt(i + 1);
@@ -180,7 +170,7 @@ public class Maze implements IMaze {
 
     public void spawnPowerUps(){
         Random random = new Random();
-        int maxPowerUps = (rows * cols) / 20; //5% of cells can have power-ups
+        int maxPowerUps = (rows * cols) / 20;
         String[] types = {"Health", "Speed", "Vision", "Shield"};
 
         for (int i = 0; i < maxPowerUps; i++) {
@@ -191,7 +181,7 @@ public class Maze implements IMaze {
             } while (walls[row][col] || isPowerUp(row, col) || isExit(row, col));
 
             String type = types[random.nextInt(types.length)];
-            int duration = random.nextInt(20) + 10; // 10-30 seconds duration
+            int duration = random.nextInt(20) + 10;
             powerUps.add(new PowerUp(row, col, type, duration));
         }
     }
@@ -217,12 +207,12 @@ public class Maze implements IMaze {
 
     @Override
     public boolean isExit(int row, int col) {
-        return row == rows - 1 && col == cols - 1; // Exemplu pentru ultima celulă
+        return row == rows - 1 && col == cols - 1;
     }
 
     @Override
     public boolean isWall(int row, int col) {
-        return walls[row][col]; // Dacă peretele este `true`, atunci este un perete
+        return walls[row][col];
     }
 
     @Override
@@ -243,10 +233,9 @@ public class Maze implements IMaze {
     @Override
     public void resetMaze(MazeRunner.Models.Maze.DifficultyLevel difficulty) {
         this.difficulty = difficulty;
-        // Reinițializează labirintul, folosind aceleași dimensiuni și dificultate
-        generateMaze();  // Generează un nou labirint
-        powerUps.clear();  // Curăță power-up-urile existente
-        spawnPowerUps();  // Replasează power-up-urile
+        generateMaze();
+        powerUps.clear();
+        spawnPowerUps();
     }
 
     @Override
